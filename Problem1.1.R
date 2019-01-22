@@ -9,4 +9,3 @@ my_matrix
 
 nested <- outer(mymatrix, 1:10)
 nested
-
