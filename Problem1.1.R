@@ -1,6 +1,12 @@
-vect <- c(1:10)
-vect
+x <- 1:10
+y <- 1:10
 
-my_matrix = cbind(vect, vect)
+my_matrix <- outer(x, y, "*")
+names(x) <- x
+names(y) <- y
+
 my_matrix
+
+nested <- outer(mymatrix, 1:10)
+nested
 
