@@ -11,3 +11,4 @@ family_tree
 # Date
 family_tree$Age_Years <- floor((Sys.Date() - as.Date(family_tree$Birthdays))/365)
 mean(family_tree$Age_Years)
+sd(family_tree$Age_Years)

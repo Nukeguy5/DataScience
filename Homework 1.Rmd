@@ -1,0 +1,67 @@
+---
+title: "Homework 3"
+author: "Devon Rudd"
+date: "1/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1: Matrix (Multiplication Table)
+
+```{r}
+vect <- 1:10
+
+my_matrix <- outer(vect, vect, "*")
+my_matrix
+```
+
+```{r}
+nested <- outer(my_matrix, 1:10)
+nested
+```
+
+## Problem 2: Family Tree
+
+```{r}
+# Vectors
+Names = c("Devon", "Mitchell", "Garrett", "Dion", "Serena")
+Birthdays = c("1993-06-20", "1995-04-18", "1997-12-31", "1969-08-21", "1997-07-10")
+Genders = c("M", "M", "M", "M", "F")
+
+# Family Tree
+family_tree <- data.frame(Names, Birthdays, Genders)
+family_tree
+
+# Date
+family_tree$Age_Years <- floor((Sys.Date() - as.Date(family_tree$Birthdays))/365)
+m <- mean(family_tree$Age_Years)
+s <- sd(family_tree$Age_Years)
+```
+
+#### Questions
+  1. The *mean* of the ages in my family is **`r m`**.
+  2. The *standard deviation* of ages in my family is **`r s`**
+
+
+## Problem 3: Deck of Cards
+```{r}
+face <- c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King")
+suit <- c("Clubs", "Spades", "Hearts", "Diamonds")
+
+deck <- outer(face, suit, FUN = 'paste', sep = ' of ')
+
+draw <- sample(deck, size = 100, replace = TRUE)
+
+hearts_drawn <- length(draw[grep("Hearts", draw)])
+decimal <- hearts_drawn/length(draw)
+prob <- decimal*100
+```
+
+#### Questions
+  1. The number of hearts drawn is **`r hearts_drawn`**.
+  2. Probability of drawing a heart based on the sample is **`r prob`****%**.
+  3. The actual probability is **25%**.
+  

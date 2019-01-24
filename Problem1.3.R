@@ -1,10 +1,9 @@
 face <- c("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King")
 suit <- c("Clubs", "Spades", "Hearts", "Diamonds")
 
-deck <- outer(face, suit, makecard <- function(face, suit)(
-  return(paste(face, suit, sep = " of "))
-))
+deck <- outer(face, suit, FUN = 'paste', sep = ' of ')
 
-s <- sample(deck, 100, replace = TRUE)
+draw <- sample(deck, size = 100, replace = TRUE)
 
-
+hearts_drawn <- length(draw[grep("Hearts", draw)])
+hearts_drawn/length(draw)
