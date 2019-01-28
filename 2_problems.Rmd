@@ -1,0 +1,36 @@
+---
+title: "Data Science Problems"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 2.  Data Manipulation
+
+College data sourced from the goverment [College Scorecard](https://collegescorecard.ed.gov/) using [data API](https://collegescorecard.ed.gov/data/documentation/https://collegescorecard.ed.gov/data/) using the rscorecard package.
+
+```{r scorecard_data}
+load("college_scorecard_ca.Rda")
+```
+
+### 2.1 Create a column called npt that is either public or private average price depending on data available
+
+*  How many CA college prices are not available?
+*  What is the average price for California colleges?
+*  What is the standard deviation for price?
+
+### 2.2 Filter the data for Colleges without NAs for average price and median earnings
+
+* What are the summary() statistics for median college salary? 
+* What is the median salary for William Jessup? 
+* What is the standardized score (z score) for William Jessup median earnings? 
+* Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? 
+* Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup? 
+* What is the correlation (cor) between average price and median earings? 
+
+### 2.3 Research the US Department of Education [college scorecard](https://collegescorecard.ed.gov/)
+
+*  Validate a few data colleges cost and median earning
+*  What do you expect are other variables that impact future earnings?
