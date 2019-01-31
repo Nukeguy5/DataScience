@@ -17,13 +17,33 @@ load("college_scorecard_ca.Rda")
 
 ### 2.1 Create a column called npt that is either public or private average price depending on data available
 
-*  How many CA college prices are not available?
-*  What is the average price for California colleges?
-*  What is the standard deviation for price?
+```{r}
+df <- college_scorecard_ca_latest
+df$npt <- df$npt4_pub
+na_prices_count <- sum(is.na(df$npt))
+avg_price <- mean(df$npt[!is.na(df$npt)])
+sd_price <- sd(df$npt[!is.na(df$npt)])
+```
+
+*  How many CA college prices are not available? **`r na_prices_count`**
+*  What is the average price for California colleges? **`r avg_price`**
+*  What is the standard deviation for price? **`r sd_price`**
 
 ### 2.2 Filter the data for Colleges without NAs for average price and median earnings
 
+```{r}
+library("dplyr")
+df_filter <- df %>%
+  filter(!is.na(npt)) %>%
+  filter(!is.na(md_earn_wne_p10))
+
+df_summary <- summary(df$md_earn_wne_p10)
+```
+
 * What are the summary() statistics for median college salary? 
+```{r}
+df_summary
+```
 * What is the median salary for William Jessup? 
 * What is the standardized score (z score) for William Jessup median earnings? 
 * Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? 
