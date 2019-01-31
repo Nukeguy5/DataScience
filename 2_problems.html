@@ -207,16 +207,8 @@ sd_price &lt;- sd(df$npt[!is.na(df$npt)])</code></pre>
 </div>
 <div id="filter-the-data-for-colleges-without-nas-for-average-price-and-median-earnings" class="section level3">
 <h3>2.2 Filter the data for Colleges without NAs for average price and median earnings</h3>
-<pre class="r"><code>library(&quot;dplyr&quot;)</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>df_filter &lt;- df %&gt;%
+<pre class="r"><code>library(&quot;dplyr&quot;)
+df_filter &lt;- df %&gt;%
   filter(!is.na(npt)) %&gt;%
   filter(!is.na(md_earn_wne_p10))
 

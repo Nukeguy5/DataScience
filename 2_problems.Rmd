@@ -31,7 +31,7 @@ sd_price <- sd(df$npt[!is.na(df$npt)])
 
 ### 2.2 Filter the data for Colleges without NAs for average price and median earnings
 
-```{r}
+```{r message=FALSE}
 library("dplyr")
 df_filter <- df %>%
   filter(!is.na(npt)) %>%
