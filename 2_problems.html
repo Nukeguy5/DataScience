@@ -211,8 +211,15 @@ sd_price &lt;- sd(df$npt[!is.na(df$npt)])</code></pre>
 df_filter &lt;- df %&gt;%
   filter(!is.na(npt)) %&gt;%
   filter(!is.na(md_earn_wne_p10))
+df_summary &lt;- summary(df$md_earn_wne_p10)
 
-df_summary &lt;- summary(df$md_earn_wne_p10)</code></pre>
+# WJU Median Salary
+wju &lt;- df %&gt;%
+  filter(instnm == &quot;William Jessup University&quot;)
+wju_mcs &lt;- wju$md_earn_wne_p10
+
+# WJU Z-Score
+wju_z &lt;- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])</code></pre>
 <ul>
 <li>What are the summary() statistics for median college salary?</li>
 </ul>
@@ -220,8 +227,8 @@ df_summary &lt;- summary(df$md_earn_wne_p10)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 ##   12600   27300   33300   37193   43900  143700     260</code></pre>
 <ul>
-<li>What is the median salary for William Jessup?</li>
-<li>What is the standardized score (z score) for William Jessup median earnings?</li>
+<li>What is the median salary for William Jessup? <strong>37300</strong></li>
+<li>What is the standardized score (z score) for William Jessup median earnings? <strong>0.0064821</strong></li>
 <li>Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup?</li>
 <li>Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup?</li>
 <li>What is the correlation (cor) between average price and median earings?</li>

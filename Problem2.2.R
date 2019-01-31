@@ -19,3 +19,6 @@ df_filter <- df %>%
 wju <- df %>%
   filter(instnm == "William Jessup University")
 wju$md_earn_wne_p10
+
+wju_z <- (wju$md_earn_wne_p10 - mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])
+wju_z

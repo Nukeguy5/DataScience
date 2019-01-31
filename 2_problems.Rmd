@@ -36,16 +36,24 @@ library("dplyr")
 df_filter <- df %>%
   filter(!is.na(npt)) %>%
   filter(!is.na(md_earn_wne_p10))
-
 df_summary <- summary(df$md_earn_wne_p10)
+
+# WJU Median Salary
+wju <- df %>%
+  filter(instnm == "William Jessup University")
+wju_mcs <- wju$md_earn_wne_p10
+
+# WJU Z-Score
+wju_z <- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])
+
 ```
 
 * What are the summary() statistics for median college salary? 
 ```{r}
 df_summary
 ```
-* What is the median salary for William Jessup? 
-* What is the standardized score (z score) for William Jessup median earnings? 
+* What is the median salary for William Jessup? **`r wju_mcs`**
+* What is the standardized score (z score) for William Jessup median earnings? **`r wju_z`**
 * Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? 
 * Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup? 
 * What is the correlation (cor) between average price and median earings? 
