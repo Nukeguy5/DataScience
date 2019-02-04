@@ -22,3 +22,15 @@ wju$md_earn_wne_p10
 
 wju_z <- (wju$md_earn_wne_p10 - mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])
 wju_z
+
+# Percentile of WJU
+earn_filter <- df %>%
+  filter(!is.na(md_earn_wne_p10))
+count_under <- length(which(earn_filter$md_earn_wne_p10 < wju$md_earn_wne_p10))
+count_all <- length(earn_filter$md_earn_wne_p10)
+
+wju_percentile <- count_under/count_all*100
+wju_percentile
+
+# Correlation between avg price and earnings
+corr <- cor(df_filter$md_earn_wne_p10, df_filter$npt)

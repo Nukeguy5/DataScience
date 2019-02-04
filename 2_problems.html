@@ -219,7 +219,22 @@ wju &lt;- df %&gt;%
 wju_mcs &lt;- wju$md_earn_wne_p10
 
 # WJU Z-Score
-wju_z &lt;- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])</code></pre>
+wju_z &lt;- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])
+
+# Percentile with pnorm
+earn_filter &lt;- df %&gt;%
+  filter(!is.na(md_earn_wne_p10))
+avg_md_earn &lt;- mean(earn_filter$md_earn_wne_p10)
+sd_md_earn &lt;- sd(earn_filter$md_earn_wne_p10)
+perc &lt;- pnorm(wju_z)
+
+# WJU Percentile
+count_under &lt;- length(which(earn_filter$md_earn_wne_p10 &lt;= wju$md_earn_wne_p10))
+count_all &lt;- length(earn_filter$md_earn_wne_p10)
+wju_percentile &lt;- count_under/count_all*100
+
+# Median Earnings and Avg Cost Correlation
+corr &lt;- cor(df_filter$npt, df_filter$md_earn_wne_p10)</code></pre>
 <ul>
 <li>What are the summary() statistics for median college salary?</li>
 </ul>
@@ -229,9 +244,9 @@ wju_z &lt;- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_w
 <ul>
 <li>What is the median salary for William Jessup? <strong>37300</strong></li>
 <li>What is the standardized score (z score) for William Jessup median earnings? <strong>0.0064821</strong></li>
-<li>Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup?</li>
-<li>Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup?</li>
-<li>What is the correlation (cor) between average price and median earings?</li>
+<li>Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? <strong>50.2585976%</strong></li>
+<li>Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup? <strong>61.9256018%</strong></li>
+<li>What is the correlation (cor) between average price and median earings? <strong>0.5598425</strong></li>
 </ul>
 </div>
 <div id="research-the-us-department-of-education-college-scorecard" class="section level3">
