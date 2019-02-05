@@ -44,18 +44,16 @@ wju <- df %>%
 wju_mcs <- wju$md_earn_wne_p10
 
 # WJU Z-Score
-wju_z <- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])
+wju_z <- (wju_mcs - mean(df_filter$md_earn_wne_p10))/sd(df_filter$md_earn_wne_p10)
 
 # Percentile with pnorm
-earn_filter <- df %>%
-  filter(!is.na(md_earn_wne_p10))
-avg_md_earn <- mean(earn_filter$md_earn_wne_p10)
-sd_md_earn <- sd(earn_filter$md_earn_wne_p10)
+avg_md_earn <- mean(df_filter$md_earn_wne_p10)
+sd_md_earn <- sd(df_filter$md_earn_wne_p10)
 perc <- pnorm(wju_z)
 
 # WJU Percentile
-count_under <- length(which(earn_filter$md_earn_wne_p10 <= wju$md_earn_wne_p10))
-count_all <- length(earn_filter$md_earn_wne_p10)
+count_under <- sum(df_filter$md_earn_wne_p10 <= wju$md_earn_wne_p10)
+count_all <- length(df_filter$md_earn_wne_p10)
 wju_percentile <- count_under/count_all*100
 
 # Median Earnings and Avg Cost Correlation
@@ -68,7 +66,7 @@ df_summary
 ```
 * What is the median salary for William Jessup? **`r wju_mcs`**
 * What is the standardized score (z score) for William Jessup median earnings? **`r wju_z`**
-* Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? **`r perc*100`%**
+* Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? **`r perc*100`%** https://stats.stackexchange.com/questions/56065/is-there-a-quick-way-to-convert-z-scores-into-percentile-scores
 * Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup? **`r wju_percentile`%**
 * What is the correlation (cor) between average price and median earings? **`r corr`**
 
