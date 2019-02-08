@@ -73,4 +73,4 @@ df_summary
 ### 2.3 Research the US Department of Education [college scorecard](https://collegescorecard.ed.gov/)
 
 *  Validate a few data colleges cost and median earning
-*  What do you expect are other variables that impact future earnings?
+*  What do you expect are other variables that impact future earnings? **I think some variables that affect median earnings could be location and previous employment.**
