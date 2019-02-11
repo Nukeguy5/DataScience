@@ -219,18 +219,16 @@ wju &lt;- df %&gt;%
 wju_mcs &lt;- wju$md_earn_wne_p10
 
 # WJU Z-Score
-wju_z &lt;- (wju$md_earn_wne_p10 -   mean(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)]))/sd(df$md_earn_wne_p10[!is.na(df$md_earn_wne_p10)])
+wju_z &lt;- (wju_mcs - mean(df_filter$md_earn_wne_p10))/sd(df_filter$md_earn_wne_p10)
 
 # Percentile with pnorm
-earn_filter &lt;- df %&gt;%
-  filter(!is.na(md_earn_wne_p10))
-avg_md_earn &lt;- mean(earn_filter$md_earn_wne_p10)
-sd_md_earn &lt;- sd(earn_filter$md_earn_wne_p10)
+avg_md_earn &lt;- mean(df_filter$md_earn_wne_p10)
+sd_md_earn &lt;- sd(df_filter$md_earn_wne_p10)
 perc &lt;- pnorm(wju_z)
 
 # WJU Percentile
-count_under &lt;- length(which(earn_filter$md_earn_wne_p10 &lt;= wju$md_earn_wne_p10))
-count_all &lt;- length(earn_filter$md_earn_wne_p10)
+count_under &lt;- sum(df_filter$md_earn_wne_p10 &lt;= wju$md_earn_wne_p10)
+count_all &lt;- length(df_filter$md_earn_wne_p10)
 wju_percentile &lt;- count_under/count_all*100
 
 # Median Earnings and Avg Cost Correlation
@@ -243,9 +241,9 @@ corr &lt;- cor(df_filter$npt, df_filter$md_earn_wne_p10)</code></pre>
 ##   12600   27300   33300   37193   43900  143700     260</code></pre>
 <ul>
 <li>What is the median salary for William Jessup? <strong>37300</strong></li>
-<li>What is the standardized score (z score) for William Jessup median earnings? <strong>0.0064821</strong></li>
-<li>Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? <strong>50.2585976%</strong></li>
-<li>Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup? <strong>61.9256018%</strong></li>
+<li>What is the standardized score (z score) for William Jessup median earnings? <strong>0.1119501</strong></li>
+<li>Using a normal distribution and the z score for William Jessup, What is the median earnings percentile for William Jessup? <strong>54.4568496%</strong> <a href="https://stats.stackexchange.com/questions/56065/is-there-a-quick-way-to-convert-z-scores-into-percentile-scores" class="uri">https://stats.stackexchange.com/questions/56065/is-there-a-quick-way-to-convert-z-scores-into-percentile-scores</a></li>
+<li>Using the data to calculate the number of colleges less than or equal to William Jessup divided the total number of CA colleges, what is the percentile for William Jessup? <strong>69.6551724%</strong></li>
 <li>What is the correlation (cor) between average price and median earings? <strong>0.5598425</strong></li>
 </ul>
 </div>
@@ -253,7 +251,7 @@ corr &lt;- cor(df_filter$npt, df_filter$md_earn_wne_p10)</code></pre>
 <h3>2.3 Research the US Department of Education <a href="https://collegescorecard.ed.gov/">college scorecard</a></h3>
 <ul>
 <li>Validate a few data colleges cost and median earning</li>
-<li>What do you expect are other variables that impact future earnings?</li>
+<li>What do you expect are other variables that impact future earnings? <strong>I think some variables that affect median earnings could be location and previous employment.</strong></li>
 </ul>
 </div>
 </div>
