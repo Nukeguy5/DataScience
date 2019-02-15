@@ -1,0 +1,171 @@
+---
+title: "Exam 1"
+author: "Devon Rudd"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Congratulations!  You have just been hired to the California state education department as a data analyst.  Your boss has an initiative to improve college advising for an online advising tool.  To get started she needs data to understand California colleges and academic programs available to recommend colleges for different individuals.
+
+Please show each step with comments in the R code and solution formatted correctly in a brief sentence.
+
+## 1.  The first request is to add a sample of users to analyze:  
+
+Full Name  | Birthday | Male | Priority | Program of interest
+------------- | ------------- | ------------- | ------------- | -------------
+MCPHERSON, JOHN  | 2/2/2002 | 1 | Low cost college on campus | Physical Science
+PERCY, JUDY  | 3/3/1998 | 0 | Online college with high graduation rate | Communication
+LONG, ELENA  | 4/4/2003 | 0 | High earnings on campus | Architecture
+THAYER, RHONDA  | 5/5/2004 | 0 | High earnings to cost ratio on campus | Engineering
+
+#### 1.1 Create a data frame (df_sample) for a sample of the 4 users on the online tool. (1 pt)
+
+```{r}
+
+# Create data frame
+cnames <- c('Full Name', 'Birthday', 'Male', 'Priority', 'Program of Interest')
+names <- c('JOHN MCPHERSON', 'JUDY PERCY', 'ELENA LONG', 'RHONDA THAYER')
+birthdays <- as.Date(c('2/2/2002', '3/3/1998', '4/4/2003', '5/5/2004'), "%d/%m/%Y")
+is_male <- c(1,0,0,0)
+prioritys <- c('Low cost college on campus', 'Online college with high graduation rate', 'High earnings on campus',
+               'High earnings to cost ratio on campus')
+programs <- c('Physical Science', 'Communication', 'Architecture', 'Engineering')
+
+df_sample <- data.frame(
+  names,
+  birthdays,
+  is_male,
+  prioritys,
+  programs
+)
+```
+
+#### 1.2 The Male = 1 indicate the user is a male.  What is the probability of being a male based on this sample? (1 pt)
+
+```{r}
+male_prob <- sum(df_sample$is_male)/length(df_sample$is_male)
+```
+**`r male_prob*100`%**
+
+
+#### 1.3 Add an indicator if the user is currently in high school based on birthday between September 2001 and September 2004. (2 pts)  
+
+
+```{r}
+# Add indicator for high school
+df_sample$is_in_hs <- as.Date('2001-09-01') < df_sample$birthdays & df_sample$birthdays < as.Date('2004-09-01')
+df_sample$is_in_hs
+```
+
+## 2.  The second request is to review and clean publically available data: 
+
+```{r}
+load("college_scorecard_ca_completion.Rda")
+load("college_scorecard_ca_programs.Rda")
+load("college_scorecard_data_dictionary.Rda")
+load("college_scorecard_ca_latest.Rda")
+```
+
+#### 2.1  Based on the data_dictionary what is the data element full name for the following variables? (1pt)
+
+```{r}
+pcip27_name <- data_dictionary$NAME.OF.DATA.ELEMENT[data_dictionary$VARIABLE.NAME == 'PCIP27']
+distonly_name <- data_dictionary$NAME.OF.DATA.ELEMENT[data_dictionary$VARIABLE.NAME == 'DISTANCEONLY']
+md_earn_name <- data_dictionary$NAME.OF.DATA.ELEMENT[data_dictionary$VARIABLE.NAME == 'MD_EARN_WNE_P10']
+c150_name <- data_dictionary$NAME.OF.DATA.ELEMENT[data_dictionary$VARIABLE.NAME == 'C150_4_POOLED']
+```
+
+* PCIP27: **`r pcip27_name`**
+* DISTANCEONLY: **`r distonly_name`**
+* MD_EARN_WNE_P10: **`r md_earn_name`**
+* C150_4_POOLED: **`r c150_name`**
+
+#### 2.2  Create a new column called npt that combines npt4_pub & npt_priv.  (1pt)  
+
+
+```{r}
+# Create new column
+college_scorecard_ca_latest$npt <- cbind(
+  college_scorecard_ca_latest$npt4_priv,
+  college_scorecard_ca_latest$npt4_pub
+)
+
+college_scorecard_ca_latest$npt
+```
+
+#### 2.3  Filter colleges (2pt)
+
+Filter the data for (1) Predominantly bachelor's-degree granting colleges (preddeg==3) and (2) colleges without NA values for all the following variables: (1pt)
+```{r}
+# Filter the data
+library("dplyr")
+df_clean <- college_scorecard_ca_latest %>%
+  filter(preddeg == 3) %>%
+  filter(!is.na(distanceonly)) %>%
+  filter(!is.na(npt4_pub)) %>%
+  filter(!is.na(npt4_priv)) %>%
+  filter(!is.na(md_earn_wne_p10)) %>%
+  filter(!is.na(c150_4_pooled))
+  
+df_clean_preddeg <- college_scorecard_ca_latest$instnm[college_scorecard_ca_latest$preddeg == 3]
+df_clean_distonly <- college_scorecard_ca_latest$instnm[!is.na(college_scorecard_ca_latest$distanceonly)]
+
+df_clean
+```
+
+* distance_only
+* npt from 2.2
+* md_earn_wne_p10
+* c150_4_pooled 
+
+How many colleges of the original data set were filtered out?  What percent of colleges remain  Write a brief sentence to your boss explaining the cleaning of the data. (1pt)
+
+**Zero colleges were filtered out and 100% remain. The reason why this happened is that colleges either have a npt_pub or npt_priv and never have both.**
+
+## 3.  The third request is to select a calculate a few statistics:  (5pts)
+
+#### 3.1 Tuition Price
+
+The median tuition price is __________ with the lowest cost college at __________ with a cost of __________.
+
+#### 3.2 Graducation
+
+The mean graduation rate is __________ with the highest graduation rate at __________ with a rate of __________.
+
+#### 3.3 Future earnings per tuition Price
+
+The highest ratio of future earnings per tuition price is at __________ with a ratio of __________.
+
+## Quality review (2pt)
+
+Stop here and review your report so far.  
+
+*  Make sure to add your name to the report
+*  Does it knit correctly?
+*  Are there any misspellings?  
+*  Can anything be formatted/rounded for better communication in the report?  
+
+Take 5 minutes to organize the code and rmarkdown for submission.
+
+Time Taken: ** **
+
+## Challenge! Only if you have time..
+
+Select one of the users and determine the top 3 colleges.  (2pts)  
+Base the recommendation on: 
+
+*  Online preference: Filter for online or on campus colleges depending on the preference indicated
+*  Program: Filter for colleges with at least 10% Percentage of degrees awarded in the preferred program
+*  Priority:  Sort based on priority statistic  
+
+
+```{r}
+# Logic for recommendation
+```
