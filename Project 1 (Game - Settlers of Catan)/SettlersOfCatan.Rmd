@@ -1,11 +1,9 @@
 ---
-title: "SettlersOFCatan"
+title: "Settlers Of Catan"
 author: "Devon Rudd"
 date: "February 18, 2019"
 output: html_document
 ---
-
-## Settlers of Catan
 
 ### Abstract
 This project is designed to find the best strategy to recieve the most resource cards form the first two settlements. We will be comparing two different methods to recieve the most resource cards.
@@ -61,38 +59,34 @@ From one game, we can see **Player 1 received `r player1_card_amount` cards** an
 The next order of business is being able to simulate more than one game at a time to determine if there is a definite difference based on the placement. From this we can determine a variety of different statistics such as average cards received in a game and how many games that a player received more cards than a player.
 
 ```{r}
-
-game_tracker <- data.frame(
-    player1_most_cards <- c(),
-    player1_card_amount <- c(),
-    player2_most_cards <- c(),
-    player2_card_amount <- c()
-  )
-
-play_games <- function(n_games, n_rolls, player1, player2, game_tracker){
-
+play_games <- function(n_games, n_rolls, player1, player2){
+  player1_most_cards <- 0
+  player2_most_cards <- 0
   tie <- 0
   for (i in 1:n_games){
     result <- play_game(n_rolls, player1, player2)
-    player1_result <- result[1]
-    player2_result <- result[2]
-    append(game_tracker$player1_card_amount, player1_result)
-    append(game_tracker$player2_card_amount, player2_result)
-    if (player1_result > player2_result) {
-      append(game_tracker$player1_most_cards, 1)
-      append(game_tracker$player2_most_cards, 0)
-    } else if (player1_result < player2_result) {
-      append(game_tracker$player2_most_cards, 1)
-      append(game_tracker$player1_most_cards, 0)
+    player1_total <- result[1]
+    player2_total <- result[2]
+    if (player1_total > player2_total) {
+      player1_most_cards <- player1_most_cards + 1
+    } else if (player1_total < player2_total) {
+      player2_most_cards <- player2_most_cards + 1
     } else {
       tie <- tie + 1
     }
   }
-  outcome <- c(sum(game_tracker$player1_most_Cards), sum(game_tracker$player2_most_cards), tie)
+  outcome <- c(player1_most_cards, player2_most_cards, tie)
   return(outcome)
 }
 
-outcome <- play_games(100, 40, player1 = player1, player2 = player2, game_tracker = game_tracker)
-outcome
+result <- play_games(100, 40, player1 = player1, player2 = player2)
+player1_w <- result[1]
+player2_w <- result[2]
+ties_w <- result[3]
 ```
 
+From this we can see the outcome from 100 games was:
+
+ - Player 1 Games with most cards: **`r player1_w`**
+ - Player 2 Games with most cards: **`r player2_w`**
+ - Ties: **`r ties_w`**
