@@ -22,8 +22,37 @@ load('sample_people.Rda')
 Separate the person's name into a first and last name column.
 
 *  Try with strsplit() and lapply() functions to select the appropriate element.
-*  Now try with the tidyr package using the seperate() function.
-*  Show results with the head() function 
+
+```{r}
+
+split <- strsplit(sample_people$Name, ', ', fixed = TRUE)
+
+lst <- unlist(split, use.names = FALSE)
+m <- matrix(lst, nrow = 5000, byrow = T)
+colnames(m) <- c('First_Name', 'Last_Name')
+first <- m[, c('First_Name')]
+last <- m[, c('Last_Name')]
+df <- sample_people[, !(names(sample_people) %in% c('Name'))]
+df$First_Name <- first
+df$Last_Name <- last
+
+```
+
+*  Now try with the tidyr package using the separate() function.
+
+```{r}
+
+library(tidyr)
+df <- separate(sample_people, Name, c('LastName', 'FirstName'), ', ', remove = T)
+
+```
+
+*  Show results with the head() function
+
+```{r}
+head(df)
+```
+
 
 ### 3.2 Create a summary table by state.  
 
@@ -31,15 +60,54 @@ Recommend using the dplyr package with group_by() and summarize() functions.
 
 * What is the sample average and median population by state?  Give both the frequency and relative frequency of the stats using inline code on a rmarkdown table:  
 
+```{r}
+
+library(dplyr)
+g <- group_by(sample_people, State)
+c <- as.data.frame(table(g$State, dnn = "State"), responseName = "Pop")
+stat1 <- mean(c$Pop)
+stat2 <- median(c$Pop)
+
+r_freq <- function(x){x/5000}
+c$R_Freq <- sapply(c$Pop, r_freq)
+stat3 <- mean(c$R_Freq)
+stat4 <- median(c$R_Freq)
+
+```
+
 Statistic  | Average | Median
 -------------  | ------------- | -------------
-Frequency  | _STAT1_ | _STAT2_
-Relative Frequency  | _STAT3_ | _STAT4_
+Frequency  | **`r stat1`** | **`r stat2`**
+Relative Frequency  | **`r stat3`** | **`r stat4`**
 
-* Order the summary table from largest to smallest population.  
-* [Add a html table](https://rmarkdown.rstudio.com/lesson-7.html) of the 5 larges states using kable() 
+* Order the summary table from largest to smallest population.
+
+```{r}
+
+ordered <- c[order(c$Pop, decreasing = T),]
+
+```
+
+* [Add a html table](https://rmarkdown.rstudio.com/lesson-7.html) of the 5 larges states using kable()
+
+```{r, results='asis'}
+
+library(knitr)
+kable(ordered[1:5,], caption = "Top 5 Populations")
+
+```
+
 * Add a plot of all the state populations using plot() 
+
+```{r}
+
+plot(ordered$State, ordered$Pop, "h")
+
+```
+
 * Describe the sample population data based on the table and the plot including the probability of an individual in the sample being from California.
+
+**The sample population data shows that there was a higher number of individuals from California more than any other state. The propbability of an individual being from California is approximately 12.94%. Since California is the most populus state, this is to be expected based from our sample.**
 
 ### 3.3 Add the R default data state.name & state.region
 
