@@ -299,37 +299,78 @@ c150_name &lt;- data_dictionary$NAME.OF.DATA.ELEMENT[data_dictionary$VARIABLE.NA
 <div id="create-a-new-column-called-npt-that-combines-npt4_pub-npt_priv.-1pt" class="section level4">
 <h4>2.2 Create a new column called npt that combines npt4_pub &amp; npt_priv. (1pt)</h4>
 <pre class="r"><code># Create new column
-# college_scorecard_ca_latest$npt &lt;- c(
-#   college_scorecard_ca_latest$npt4_priv[!is.na(college_scorecard_ca_latest$npt4_priv)],
-#   college_scorecard_ca_latest$npt4_pub[!is.na(college_scorecard_ca_latest$npt4_pub)]
-# )
-# college_scorecard_ca_latest$npt</code></pre>
+college_scorecard_ca_latest$npt &lt;- cbind(
+  college_scorecard_ca_latest$npt4_priv,
+  college_scorecard_ca_latest$npt4_pub
+)</code></pre>
 </div>
 <div id="filter-colleges-2pt" class="section level4">
 <h4>2.3 Filter colleges (2pt)</h4>
 <p>Filter the data for (1) Predominantly bachelor’s-degree granting colleges (preddeg==3) and (2) colleges without NA values for all the following variables: (1pt)</p>
+<pre class="r"><code># Filter the data
+library(&quot;dplyr&quot;)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>df_clean &lt;- college_scorecard_ca_latest %&gt;%
+  filter(preddeg == 3) %&gt;%
+  filter(!is.na(distanceonly)) %&gt;%
+  filter(!is.na(npt4_pub)) %&gt;%
+  filter(!is.na(npt4_priv)) %&gt;%
+  filter(!is.na(md_earn_wne_p10)) %&gt;%
+  filter(!is.na(c150_4_pooled))
+  
+df_clean_preddeg &lt;- college_scorecard_ca_latest$instnm[college_scorecard_ca_latest$preddeg == 3]
+df_clean_distonly &lt;- college_scorecard_ca_latest$instnm[!is.na(college_scorecard_ca_latest$distanceonly)]
+
+df_clean</code></pre>
+<pre><code>## # A tibble: 0 x 14
+## # … with 15 variables: zip &lt;chr&gt;, npt4_pub &lt;int&gt;, instnm &lt;chr&gt;,
+## #   preddeg &lt;int&gt;, stabbr &lt;chr&gt;, unitid &lt;int&gt;, ugds &lt;int&gt;,
+## #   distanceonly &lt;int&gt;, control &lt;int&gt;, md_earn_wne_p10 &lt;int&gt;,
+## #   npt4_priv &lt;int&gt;, c150_4_pooled &lt;dbl&gt;, year &lt;chr&gt;, npt[,1] &lt;int&gt;,
+## #   [,2] &lt;int&gt;</code></pre>
 <ul>
 <li>distance_only</li>
 <li>npt from 2.2</li>
 <li>md_earn_wne_p10</li>
 <li>c150_4_pooled</li>
 </ul>
-<pre class="r"><code># Filter the data</code></pre>
 <p>How many colleges of the original data set were filtered out? What percent of colleges remain Write a brief sentence to your boss explaining the cleaning of the data. (1pt)</p>
+<p><strong>Zero colleges were filtered out and 100% remain. The reason why this happened is that colleges either have a npt_pub or npt_priv and never have both.</strong></p>
 </div>
 </div>
 <div id="the-third-request-is-to-select-a-calculate-a-few-statistics-5pts" class="section level2">
 <h2>3. The third request is to select a calculate a few statistics: (5pts)</h2>
 <div id="tuition-price" class="section level4">
 <h4>3.1 Tuition Price</h4>
-<p>The median tuition price is __________ with the lowest cost college at __________ with a cost of __________.</p>
+<pre class="r"><code>clean_tuition &lt;- college_scorecard_ca_latest$npt[!is.na(college_scorecard_ca_latest$npt)]
+median_tuition &lt;- mean(clean_tuition)
+min_tuition &lt;- min(clean_tuition)
+idx &lt;- which(clean_tuition == min_tuition)
+min_college &lt;- college_scorecard_ca_latest$instnm[idx]</code></pre>
+<p>The median tuition price is <strong>1.72340510^{4}</strong> with the lowest cost college at <strong>San Francisco Film School</strong> with a cost of <strong>$1353</strong>.</p>
 </div>
-<div id="graducation" class="section level4">
-<h4>3.2 Graducation</h4>
-<p>The mean graduation rate is __________ with the highest graduation rate at __________ with a rate of __________.</p>
+<div id="graduation" class="section level4">
+<h4>3.2 Graduation</h4>
+<pre class="r"><code>clean_gradrate &lt;- college_scorecard_ca_latest$c150_4_pooled[!is.na(college_scorecard_ca_latest$c150_4_pooled)]
+median_gradrate &lt;- mean(clean_gradrate)
+max_gradrate &lt;- max(clean_gradrate)
+idx &lt;- which(clean_gradrate == max_gradrate)
+max_college &lt;- college_scorecard_ca_latest$instnm[idx]</code></pre>
+<p>The mean graduation rate is <strong>55.9175862%</strong> with the highest graduation rate at <strong>97.13%</strong> with a rate of <strong>Oceanside College of Beauty</strong>.</p>
 </div>
 <div id="future-earnings-per-tuition-price" class="section level4">
 <h4>3.3 Future earnings per tuition Price</h4>
+<pre class="r"><code>corr &lt;- cor(college_scorecard_ca_latest$md_earn_wne_p10 ,college_scorecard_ca_latest$npt)
+corr</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]   NA   NA</code></pre>
 <p>The highest ratio of future earnings per tuition price is at __________ with a ratio of __________.</p>
 </div>
 </div>
@@ -337,13 +378,13 @@ c150_name &lt;- data_dictionary$NAME.OF.DATA.ELEMENT[data_dictionary$VARIABLE.NA
 <h2>Quality review (2pt)</h2>
 <p>Stop here and review your report so far.</p>
 <ul>
-<li>Make sure to add your name to the report</li>
-<li>Does it knit correctly?</li>
-<li>Are there any misspellings?<br />
-</li>
-<li>Can anything be formatted/rounded for better communication in the report?</li>
+<li>Make sure to add your name to the report <strong>YES</strong></li>
+<li>Does it knit correctly? <strong>YES</strong></li>
+<li>Are there any misspellings? <strong>None found</strong></li>
+<li>Can anything be formatted/rounded for better communication in the report? <strong>Could not think of anything else.</strong></li>
 </ul>
 <p>Take 5 minutes to organize the code and rmarkdown for submission.</p>
+<p>Time Taken: ** 1 hr 15 mins**</p>
 </div>
 <div id="challenge-only-if-you-have-time.." class="section level2">
 <h2>Challenge! Only if you have time..</h2>

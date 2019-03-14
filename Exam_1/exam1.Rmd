@@ -96,8 +96,6 @@ college_scorecard_ca_latest$npt <- cbind(
   college_scorecard_ca_latest$npt4_priv,
   college_scorecard_ca_latest$npt4_pub
 )
-
-college_scorecard_ca_latest$npt
 ```
 
 #### 2.3  Filter colleges (2pt)
@@ -132,29 +130,44 @@ How many colleges of the original data set were filtered out?  What percent of c
 ## 3.  The third request is to select a calculate a few statistics:  (5pts)
 
 #### 3.1 Tuition Price
+```{r}
+clean_tuition <- college_scorecard_ca_latest$npt[!is.na(college_scorecard_ca_latest$npt)]
+median_tuition <- mean(clean_tuition)
+min_tuition <- min(clean_tuition)
+idx <- which(clean_tuition == min_tuition)
+min_college <- college_scorecard_ca_latest$instnm[idx]
+```
+The median tuition price is **`r median_tuition`** with the lowest cost college at **`r min_college`** with a cost of **$`r min_tuition`**.
 
-The median tuition price is __________ with the lowest cost college at __________ with a cost of __________.
-
-#### 3.2 Graducation
-
-The mean graduation rate is __________ with the highest graduation rate at __________ with a rate of __________.
+#### 3.2 Graduation
+```{r}
+clean_gradrate <- college_scorecard_ca_latest$c150_4_pooled[!is.na(college_scorecard_ca_latest$c150_4_pooled)]
+median_gradrate <- mean(clean_gradrate)
+max_gradrate <- max(clean_gradrate)
+idx <- which(clean_gradrate == max_gradrate)
+max_college <- college_scorecard_ca_latest$instnm[idx]
+```
+The mean graduation rate is **`r median_gradrate*100`%** with the highest graduation rate at **`r max_gradrate*100`%** with a rate of **`r max_college`**.
 
 #### 3.3 Future earnings per tuition Price
-
+```{r}
+corr <- cor(college_scorecard_ca_latest$md_earn_wne_p10 ,college_scorecard_ca_latest$npt)
+corr
+```
 The highest ratio of future earnings per tuition price is at __________ with a ratio of __________.
 
 ## Quality review (2pt)
 
 Stop here and review your report so far.  
 
-*  Make sure to add your name to the report
-*  Does it knit correctly?
-*  Are there any misspellings?  
-*  Can anything be formatted/rounded for better communication in the report?  
+*  Make sure to add your name to the report **YES**
+*  Does it knit correctly? **YES**
+*  Are there any misspellings? **None found**
+*  Can anything be formatted/rounded for better communication in the report? **Could not think of anything else.**
 
 Take 5 minutes to organize the code and rmarkdown for submission.
 
-Time Taken: ** **
+Time Taken: ** 1 hr 15 mins**
 
 ## Challenge! Only if you have time..
 
