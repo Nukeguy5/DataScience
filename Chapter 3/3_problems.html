@@ -351,26 +351,27 @@ df_region$ID &lt;- row.names(df_region)</code></pre>
 <ul>
 <li>Sample one person, what is his/her percentile based on their age?</li>
 </ul>
-<pre class="r"><code>sample_id &lt;- sample(df_region$ID, 1)
+<pre class="r"><code># sample_id &lt;- sample(df_region$ID, 1)
+sample_id &lt;- 683
 sample_age &lt;- df_region$Age[df_region$ID == sample_id]
 age_us &lt;- df_region$ID[df_region$Age &lt; sample_age]
 
 age_us_percentile &lt;- length(age_us)/length(df_region$ID) </code></pre>
-<p><strong>0.7106</strong></p>
+<p><strong>0.1948</strong></p>
 <ul>
 <li>For that person, what is his/her percentile based on their age for his/her region?</li>
 </ul>
 <pre class="r"><code>sample_region &lt;- df_region$Region[df_region$ID == sample_id]
 age_region &lt;- df_region$ID[df_region$Age[df_region$Region == sample_region] &lt; sample_age]
 age_region_percentile &lt;- length(age_region)/length(df_region$ID[df_region$Region == sample_region])</code></pre>
-<p><strong>3.2663507</strong></p>
+<p><strong>0.8347176</strong></p>
 <ul>
 <li>For that person, what is his/her percentile based on their age for his/her state?</li>
 </ul>
 <pre class="r"><code>sample_state &lt;- df_region$State[df_region$ID == sample_id]
 age_state &lt;- df_region$ID[df_region$Age[df_region$State == sample_state] &lt; sample_age]
 age_state_percentile &lt;- length(age_state)/length(df_region$ID[df_region$State == sample_state])</code></pre>
-<p><strong>15.518018</strong></p>
+<p><strong>1.6058733</strong></p>
 <ul>
 <li>Using the mutate(), create columns for each persons age percentile for US, their region and their state. Validate calculation based on the person sampled.</li>
 </ul>

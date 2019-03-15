@@ -165,8 +165,11 @@ age_region_percentile <- length(age_region)/length(df_region$ID[df_region$Region
 ```{r}
 
 sample_state <- df_region$State[df_region$ID == sample_id]
+sample_state
 age_state <- df_region$ID[df_region$Age[df_region$State == sample_state] < sample_age]
+head(age_state)
 age_state_percentile <- length(age_state)/length(df_region$ID[df_region$State == sample_state])
+age_state_percentile
 
 ```
 
