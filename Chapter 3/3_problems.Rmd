@@ -138,8 +138,8 @@ df_region$ID <- row.names(df_region)
 
 ```{r}
 
-# sample_id <- sample(df_region$ID, 1)
-sample_id <- 683
+sample_id <- sample(df_region$ID, 1)
+# sample_id <- 684
 sample_age <- df_region$Age[df_region$ID == sample_id]
 age_us <- df_region$ID[df_region$Age < sample_age]
 
@@ -147,33 +147,32 @@ age_us_percentile <- length(age_us)/length(df_region$ID)
 
 ```
 
-**`r age_us_percentile`**
+**Age Percentile US: `r age_us_percentile`**
 
 *  For that person, what is his/her percentile based on their age for his/her region?
 
 ```{r}
 sample_region <- df_region$Region[df_region$ID == sample_id]
-age_region <- df_region$ID[df_region$Age[df_region$Region == sample_region] < sample_age]
-age_region_percentile <- length(age_region)/length(df_region$ID[df_region$Region == sample_region])
+age_region <- subset(df_region, df_region$Region == sample_region)
+age_region_less <- age_region$ID[age_region$Age < sample_age]
+age_region_percentile <- length(age_region_less)/length(age_region$ID)
 
 ```
 
-**`r age_region_percentile`**
+**Age Percentile Region:`r age_region_percentile`**
 
 *  For that person, what is his/her percentile based on their age for his/her state?
 
 ```{r}
 
 sample_state <- df_region$State[df_region$ID == sample_id]
-sample_state
-age_state <- df_region$ID[df_region$Age[df_region$State == sample_state] < sample_age]
-head(age_state)
-age_state_percentile <- length(age_state)/length(df_region$ID[df_region$State == sample_state])
-age_state_percentile
+age_state <- subset(df_region, df_region$State == sample_state)
+age_state_less <- age_state$ID[age_state$Age < sample_age]
+age_state_percentile <- length(age_state_less)/length(age_state$ID)
 
 ```
 
-**`r age_state_percentile`**
+**Age Percentile State: `r age_state_percentile`**
 
 *  Using the mutate(), create columns for each persons age percentile for US, their region and their state.  Validate calculation based on the person sampled.
 
