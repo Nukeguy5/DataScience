@@ -29,3 +29,8 @@ ny_unemployment$Area <- ny_unemployment$Area %>%
 
 # only keep matching cities
 ny_filtered <- ny_unemployment[ny_unemployment$Area == unique(ny_cities$city),]
+
+# merge
+ny_all <- merge(ny_cities, ny_filtered, by.x = "city", by.y = "Area")
+
+save(ny_all, file = "NY_Unemployment_Data.Rdata")
