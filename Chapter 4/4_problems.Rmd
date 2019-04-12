@@ -33,18 +33,70 @@ temp_convert<- function(x){ (x/10)*(9/5) + 32}
 ### 4.1  Review the US city data
 
 *  Plot a box plot of us_cities population (pop).  What do you observe about the data?
+
+```{r}
+boxplot(us_cities$pop)
+```
+
+** **
+
 *  Retirees are interested in living close to a city that is not to large or to small.  Exclude cities less than 1st quartile and above 3rd quartile.  Name the new data frame us_cities_mid.
+
+```{r}
+bq <- quantile(us_cities$pop, probs = .25)
+tq <- quantile(us_cities$pop, probs = .75)
+
+us_cities_mid <- us_cities[us_cities$pop >= bq & us_cities$pop <= tq,]
+```
+
 *  Plot a bar chart of mid size cities by state.  What 3 states have the most mid sized cities?
+
+```{r}
+
+library(dplyr)
+mid_frequency <- us_cities_mid %>% group_by(state) %>%
+  summarize(Frequency = length(city)/length(us_cities_mid$city)) %>%
+  arrange(desc(Frequency)) %>%
+  mutate(state = factor(state, levels = state))
+p2 <- ggplot(mid_frequency, aes(x=state, y=Frequency)) + geom_bar(stat = "identity")
+# ggplot(us_cities_mid, aes(state)) + geom_bar(stat = "count")
+p2
+```
 
 ### 4.2  Review weather data
 
 * Tidy up the data for analysis
-    + Filter weather_us for the first 5 columns (id, data, prcp, tmax, tmin)
-    + Create a data frame of **unique** stations with the elevation, latitude and longitude using station_data. 
+    + Filter weather_us for the first 5 columns (id, date, prcp, tmax, tmin)
+    
+    
+```{r}
+weather_red <- weather_us[, names(weather_us) == c("id", "date", "prcp", "tmax", "tmin")]
+```
+    
+    + Create a data frame of **unique** stations with the elevation, latitude and longitude using station_data.
+    
+```{r}
+stations <- unique(subset(station_data, select = c("id", "name", "elevation", "latitude", "longitude")))
+```
+    
     + **Merge** or **Join** the station data and city station data into the weather_us data frame.
+    
+```{r}
+names(city_stations) <- c("city", "id", "distance")
+all_data <- merge(stations, weather_us, by = "id") %>% 
+  inner_join(city_stations, weather_us, by = "id")
+
+```
+    
 * Convert units
     +  tmax and tmin using the temp_convert function
+```{r}
+all_data$tmax <- sapply(all_data$tmax, temp_convert)
+```
     +  Filter extreme weather with min temp < -30 and  max temp > 120
+```{r}
+# x_weather <- subset(all_data, c( < -30, tmax > 120))
+```
     +  elevation from meters to feet.  Multiply by 3.281
 * Create 4 scatter plots for January (low temperature) and July (high temperature).  Try geom_point() with alpha = 0.1 due to amount of data.
     +  January low temp vs latitude
@@ -58,6 +110,12 @@ temp_convert<- function(x){ (x/10)*(9/5) + 32}
 ### 4.3 Recommendation list.
 
 *  Summarize weather data with grouping by city
+
+```{r}
+# library(gridExtra)
+# grid.arrange()
+
+```
     + Average min temp from January
     + Average max temp from July
     + Average elevation
