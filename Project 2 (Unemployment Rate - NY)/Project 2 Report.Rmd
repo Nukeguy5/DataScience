@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
 ## Filter and Merge
@@ -75,4 +75,47 @@ This left me with **`r print(length(unique(ny_all$city)))`** cities to individua
 head(ny_all)
 ```
 
+## Visualizing Data
+
+Below is a histogram of the unemployed for the city of Albany, NY.
+
+```{r}
+library(ggplot2)
+city = "Albany"
+city_stat <- ny_all[ny_all$city == city,]
+avg_ue_count <- round(mean(city_stat$Unemployed), 0)
+
+# https://stackoverflow.com/questions/39679057/r-ggplot2-stat-count-must-not-be-used-with-a-y-aesthetic-error-in-bar-graph
+ue_hist <- ggplot(data=city_stat, aes(x = Year, y = Unemployed)) +
+  geom_histogram(stat = "identity", fill = 'red', color = "black") +
+  geom_hline(yintercept = avg_ue_count) +
+  labs(title = city)
+ue_hist
+```
+
+The average number of people unemployed through the years is **`r avg_ue_count`**. Next I wanted to visualize the trend of unemployment vs. the available labor force. The graphs are shown below.
+
+```{r}
+avg_ue_rate <- round(mean(city_stat$Unemployment.Rate), 2)
+ue_line <- ggplot(data=city_stat, aes(x = Year, y = Unemployment.Rate)) +
+  geom_line(stat = "identity", color = "red") +
+  geom_hline(yintercept = avg_ue_rate, color = 'darkblue') +
+  labs(y = "Number of people", title = "Unemployment Rate")
+
+avg_lf <- round(mean(city_stat$Labor.Force), 0)
+lf_line <- ggplot(data=city_stat, aes(x = Year, y = Labor.Force)) +
+  geom_line(stat = "identity", color = "blue") +
+  geom_hline(yintercept = avg_lf) +
+  labs(y = "Number of People", title = "Labor Force")
+
+library(gridExtra)
+grid.arrange(
+  ue_line, lf_line,
+  widths = c(2,1),
+  layout_matrix = rbind(c(1),
+                        c(2))
+)
+```
+
+From this graph we can see that the unemployment rate has improved over the years, but the labor force of Albany lost a lot of employed people between the years of 1998 and 2002. The vertical lines represent the mean of each graph. For the unemployment rate, the mean was **`r avg_ue_rate`%**. The mean labor force was **`r avg_lf`**.
 
