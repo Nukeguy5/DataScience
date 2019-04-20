@@ -4,7 +4,6 @@
 
 # Load
 load("us_cities.Rda")
-cities <- us_cities
 ny_unemployment <- read.csv("Local_Area_Unemployment_Statistics__Beginning_1976.csv")
 
 
@@ -12,8 +11,9 @@ library(dplyr)
 library(stringr)
 
 # Filter - https://stackoverflow.com/questions/38850629/subset-a-column-in-data-frame-based-on-another-data-frame-list
+cities <- us_cities
 ny_cities <- cities[cities$state == "NY",]
-s <- strsplit(ny_cities$city, split = ' ')
+# s <- strsplit(ny_cities$city, split = ' ')
 # ny_cities$city <- sapply(s, "[", 1)  # https://stat.ethz.ch/pipermail/r-help/2008-April/159332.html
 ny_cities$city <- ny_cities$city %>%
   str_remove_all(" NY")

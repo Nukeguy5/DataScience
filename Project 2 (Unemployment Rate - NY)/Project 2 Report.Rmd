@@ -1,0 +1,78 @@
+---
+title: "Project 2 - NY Unemployment"
+author: "Devon Rudd"
+date: "April 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Filter and Merge
+
+The data was recieved from https://catalog.data.gov/dataset/local-area-unemployment-statistics-beginning-1976 in .csv format.
+
+```{r}
+load("us_cities.Rda")
+ny_unemployment <- read.csv("Local_Area_Unemployment_Statistics__Beginning_1976.csv")
+```
+
+### Filtering us_cities
+
+In order to match the data to make it suitable for merging, I had to first filter the data provided from moodle to only be cities from New York.
+
+```{r}
+cities <- us_cities
+ny_cities <- cities[cities$state == "NY",]
+```
+
+Since each city in the provided data also had the state in the string, I removed the state abbreveation from the city string in the code below. I utilized the stringr library which makes string manipulation in R very simple.
+
+```{r echo=FALSE}
+library(dplyr)
+library(stringr)
+
+ny_cities$city <- ny_cities$city %>%
+  str_remove_all(" NY")
+```
+
+### Filtering Unemployment Data
+
+The data received for the unemployment data had Area data involved with it as well. This included counties and other state areas. I filtered the data to only keep cities and towns. I then removed the strings " City" and " Town" from each row.
+
+```{r}
+# keep only cities, eliminate county data
+ny_unemployment <- ny_unemployment %>%
+  filter(str_detect(ny_unemployment$Area, c("City", "Town"))) 
+    # https://sebastiansauer.github.io/dplyr_filter/
+  
+# remove city/town from string
+ny_unemployment$Area <- ny_unemployment$Area %>% 
+  str_remove_all(" City") %>%
+  str_remove_all(" Town")
+```
+
+### Making things match
+
+I wanted to make sure the data had the same cities for both, so I used the cities in the provided data to filter the cities in the data retrieved.
+
+```{r echo=FALSE}
+ny_filtered <- ny_unemployment[ny_unemployment$Area == unique(ny_cities$city),]
+```
+
+### Merging
+
+From here I was able to merge the data leaving 
+
+```{r}
+ny_all <- merge(ny_cities, ny_filtered, by.x = "city", by.y = "Area")
+```
+
+This left me with **`r print(length(unique(ny_all$city)))`** cities to individually work with. The final data head() is listed below and was saved as an Rdata file, provided on Moodle.
+
+```{r} 
+head(ny_all)
+```
+
+
